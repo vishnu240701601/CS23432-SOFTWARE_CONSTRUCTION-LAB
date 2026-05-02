@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Track Courier</title>
+
+    <!-- META -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Global UI -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- Icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        body.mobile-view .container { max-width: 420px; }
+        body.desktop-view .container { max-width: 900px; }
+
+        .view-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .view-toggle button {
+            flex: 1;
+        }
+
+        .hint {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body class="mobile-view">
+
+<!-- HEADER -->
+<div class="header">
+    <i class="fa fa-location-dot"></i> Track Your Courier
+</div>
+
+<!-- CONTENT -->
+<div class="container">
+
+    <!-- VIEW SWITCH -->
+    <div class="view-toggle">
+        <button onclick="setMobileView()">
+            <i class="fa fa-mobile-alt"></i> Mobile View
+        </button>
+        <button onclick="setDesktopView()">
+            <i class="fa fa-desktop"></i> Desktop View
+        </button>
+    </div>
+
+    <!-- CARD -->
+    <div class="card">
+
+        <h2>
+            <i class="fa fa-box"></i>
+            Enter Tracking ID
+        </h2>
+
+        <form method="post">
+
+            <div class="input-icon">
+                <i class="fa fa-barcode"></i>
+                <input
+                    type="text"
+                    name="tracking_id"
+                    placeholder="Enter Tracking ID"
+                    required
+                >
+            </div>
+
+            <button type="submit">
+                <i class="fa fa-search"></i>
+                Track Courier
+            </button>
+
+        </form>
+
+        <hr style="margin:18px 0;">
+
+        <p class="hint">
+            <i class="fa fa-qrcode"></i><br>
+            Scan the QR code using your phone camera<br>
+            and enter the Tracking ID above
+        </p>
+
+        <a href="/user_dashboard" style="display:block; text-align:center; margin-top:15px;">
+            ⬅ Back to Dashboard
+        </a>
+
+    </div>
+</div>
+
+<!-- VIEW TOGGLE SCRIPT -->
+<script>
+function setMobileView() {
+    document.body.classList.remove("desktop-view");
+    document.body.classList.add("mobile-view");
+}
+
+function setDesktopView() {
+    document.body.classList.remove("mobile-view");
+    document.body.classList.add("desktop-view");
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Staff Location Update</title>
+
+    <!-- GLOBAL CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+
+    <!-- FONT AWESOME -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <i class="fa-solid fa-location-dot"></i>
+    Staff Location Update
+</div>
+
+<!-- VIEW MODE TOGGLE -->
+<div style="text-align:center; margin:10px;">
+    <button class="btn" onclick="toggleView()">
+        <i class="fa-solid fa-mobile-screen"></i> /
+        <i class="fa-solid fa-desktop"></i>
+        Toggle View
+    </button>
+</div>
+
+<!-- MAIN CONTAINER -->
+<div class="container" id="viewContainer">
+
+    <!-- LIVE GPS CARD -->
+    <div class="card">
+        <h2><i class="fa-solid fa-satellite-dish"></i> Live GPS Tracking</h2>
+
+        <input type="text" id="trackingId"
+               placeholder="Enter Tracking ID" required>
+
+        <button onclick="startLiveGPS()">
+            <i class="fa-solid fa-location-arrow"></i> Start Live GPS
+        </button>
+
+        <button onclick="stopLiveGPS()"
+                style="margin-top:10px;background:#d32f2f;">
+            <i class="fa-solid fa-stop"></i> Stop GPS
+        </button>
+
+        <p id="status"
+           style="font-weight:bold; text-align:center; margin-top:10px;"></p>
+    </div>
+
+    <!-- MANUAL UPDATE CARD -->
+    <div class="card">
+        <h2><i class="fa-solid fa-pen"></i> Manual Location Update (Backup)</h2>
+
+        <form method="POST">
+            <input type="text" name="tracking_id"
+                   placeholder="Tracking ID" required>
+
+            <input type="text" name="latitude"
+                   placeholder="Latitude (eg: 13.0827)" required>
+
+            <input type="text" name="longitude"
+                   placeholder="Longitude (eg: 80.2707)" required>
+
+            <button type="submit">
+                <i class="fa-solid fa-upload"></i> Update Location
+            </button>
+        </form>
+
+        <p style="text-align:center; margin-top:10px;">
+            👉 Copy latitude & longitude from Google Maps
+        </p>
+    </div>
+
+</div>
+
+<!-- SCRIPT -->
+<script>
+let watchId = null;
+
+/* 🔁 MOBILE / DESKTOP VIEW TOGGLE */
+function toggleView() {
+    const container = document.getElementById("viewContainer");
+    container.classList.toggle("desktop-view");
+}
+
+/* 📡 LIVE GPS (UNCHANGED LOGIC) */
+function startLiveGPS() {
+    const trackingId =
+        document.getElementById("trackingId").value.trim().toUpperCase();
+
+    if (!trackingId) {
+        alert("Enter Tracking ID");
+        return;
+    }
+
+    if (!navigator.geolocation) {
+        alert("GPS not supported");
+        return;
+    }
+
+    document.getElementById("status").innerText =
+        "📡 Live GPS started...";
+
+    watchId = navigator.geolocation.watchPosition(
+        position => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            console.log("LIVE GPS:", lat, lon);
+
+            fetch("/auto_location_update", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    tracking_id: trackingId,
+                    latitude: lat,
+                    longitude: lon
+                })
+            });
+        },
+        error => console.error(error),
+        {
+            enableHighAccuracy: true,
+            maximumAge: 0,
+            timeout: 10000
+        }
+    );
+}
+
+function stopLiveGPS() {
+    if (watchId !== null) {
+        navigator.geolocation.clearWatch(watchId);
+        document.getElementById("status").innerText =
+            "⛔ Live GPS stopped";
+    }
+}
+</script>
+
+</body>
+</html>

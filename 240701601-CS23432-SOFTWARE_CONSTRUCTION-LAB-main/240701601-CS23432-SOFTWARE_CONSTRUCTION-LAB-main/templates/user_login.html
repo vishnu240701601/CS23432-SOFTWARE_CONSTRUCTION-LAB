@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Login</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet"
+     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Global Main CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+
+    <style>
+        /* VIEW TOGGLE (ONLY FOR DEMO) */
+        body.desktop-view .container {
+            max-width: 800px;
+        }
+        body.mobile-view .container {
+            max-width: 420px;
+        }
+
+        .view-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .view-toggle button {
+            width: auto;
+            padding: 8px 14px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body class="mobile-view">
+
+<!-- HEADER -->
+<div class="header">
+    <i class="fa fa-truck"></i> Smart Courier Tracking
+</div>
+
+<!-- VIEW TOGGLE BUTTONS -->
+<div class="view-toggle">
+    <button onclick="setMobileView()">
+        <i class="fa fa-mobile-alt"></i> Mobile View
+    </button>
+    <button onclick="setDesktopView()">
+        <i class="fa fa-desktop"></i> Desktop View
+    </button>
+</div>
+
+<!-- MAIN CONTAINER -->
+<div class="container">
+    <div class="card">
+
+        <h2><i class="fa fa-user"></i> User Login</h2>
+
+        <!-- LOGIN FORM (UNCHANGED FEATURE) -->
+        <form method="post">
+
+            <div class="input-icon">
+                <i class="fa fa-envelope"></i>
+                <input name="email" placeholder="Email" required>
+            </div>
+
+            <div class="input-icon">
+                <i class="fa fa-lock"></i>
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+
+            <button type="submit">
+                <i class="fa fa-sign-in-alt"></i> Login
+            </button>
+        </form>
+
+        <a href="/register">
+            <i class="fa fa-user-plus"></i> Don't have an account? Register
+        </a>
+
+    </div>
+</div>
+
+<!-- VIEW TOGGLE SCRIPT -->
+<script>
+function setMobileView() {
+    document.body.classList.remove("desktop-view");
+    document.body.classList.add("mobile-view");
+}
+
+function setDesktopView() {
+    document.body.classList.remove("mobile-view");
+    document.body.classList.add("desktop-view");
+}
+</script>
+
+</body>
+</html>

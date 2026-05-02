@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Assign Courier</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- GLOBAL UI -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+
+    <!-- ICONS -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        .view-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .view-toggle button {
+            flex: 1;
+        }
+
+        body.mobile-view .container {
+            max-width: 420px;
+        }
+
+        body.desktop-view .container {
+            max-width: 900px;
+        }
+    </style>
+</head>
+
+<body class="desktop-view">
+
+<!-- HEADER -->
+<div class="header">
+    <i class="fa fa-box"></i> Assign Courier
+</div>
+
+<div class="container">
+
+    <!-- VIEW TOGGLE -->
+    <div class="view-toggle">
+        <button onclick="setMobileView()">
+            <i class="fa fa-mobile-alt"></i> Mobile View
+        </button>
+        <button onclick="setDesktopView()">
+            <i class="fa fa-desktop"></i> Desktop View
+        </button>
+    </div>
+
+    <!-- CARD -->
+    <div class="card">
+
+        <h2>
+            <i class="fa fa-truck"></i>
+            Courier Details
+        </h2>
+
+        <form method="post">
+
+            <div class="input-icon">
+                <i class="fa fa-user"></i>
+                <input name="sender_name" placeholder="Sender Name" required>
+            </div>
+
+            <div class="input-icon">
+                <i class="fa fa-user-check"></i>
+                <input name="receiver_name" placeholder="Receiver Name" required>
+            </div>
+
+            <div class="input-icon">
+                <i class="fa fa-phone"></i>
+                <input name="receiver_phone" placeholder="Receiver Phone" required>
+            </div>
+
+            <div class="input-icon">
+                <i class="fa fa-envelope"></i>
+                <input name="receiver_email" placeholder="Receiver Email" required>
+            </div>
+
+            <div class="input-icon">
+                <i class="fa fa-location-dot"></i>
+                <input name="source" placeholder="Source" required>
+            </div>
+
+            <div class="input-icon">
+                <i class="fa fa-flag-checkered"></i>
+                <input name="destination" placeholder="Destination" required>
+            </div>
+
+            <select name="assigned_staff" required>
+                <option value="">👷 Select Staff</option>
+                {% for staff in staff_list %}
+                <option value="{{ staff[0] }}">{{ staff[1] }}</option>
+                {% endfor %}
+            </select>
+
+            <div class="input-icon">
+                <i class="fa fa-calendar"></i>
+                <input type="date" name="expected_date" required>
+            </div>
+
+            <button type="submit">
+                <i class="fa fa-check"></i> Create Courier
+            </button>
+
+        </form>
+
+    </div>
+</div>
+
+<!-- VIEW TOGGLE SCRIPT -->
+<script>
+function setMobileView() {
+    document.body.classList.remove("desktop-view");
+    document.body.classList.add("mobile-view");
+}
+
+function setDesktopView() {
+    document.body.classList.remove("mobile-view");
+    document.body.classList.add("desktop-view");
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<h2>Courier Created Successfully!</h2>
+
+<p><b>Tracking ID:</b> {{tracking_id}}</p>
+<p><b>QR Code:</b></p>
+<img src="{{ url_for('static', filename='qr_codes/' + tracking_id + '.png') }}" alt="QR Code">
+
+<p><b>Email Simulation:</b></p>
+<pre>{{email_message}}</pre>
+
+<a href="/admin_dashboard">Create Another Courier</a>

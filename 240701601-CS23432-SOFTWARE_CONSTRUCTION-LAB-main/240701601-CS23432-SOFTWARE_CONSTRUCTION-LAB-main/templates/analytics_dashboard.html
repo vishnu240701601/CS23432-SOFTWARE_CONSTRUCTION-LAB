@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Courier Analytics Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='analytics.css') }}">
+</head>
+<body>
+
+<div class="header">
+    <h1>📊 Courier Analytics Dashboard</h1>
+    <p>Performance & Movement Analysis</p>
+</div>
+
+<div class="container">
+
+    <!-- SUMMARY CARDS -->
+    <div class="cards">
+        <div class="card">
+            <h3>Total Distance</h3>
+            <p>{{ total_distance }} km</p>
+        </div>
+
+        <div class="card">
+            <h3>Location Updates</h3>
+            <p>{{ total_updates }}</p>
+        </div>
+
+        <div class="card">
+            <h3>Nearest Hub</h3>
+            <p>{{ nearest_hub }}</p>
+        </div>
+
+        <div class="card">
+            <h3>Hub Visits</h3>
+            <p>{{ hub_count }}</p>
+        </div>
+    </div>
+
+    <!-- HUB TABLE -->
+    <div class="table-box">
+        <h2>🏢 Hub Visit Details</h2>
+        <table>
+            <tr>
+                <th>Hub Name</th>
+                <th>Visits</th>
+            </tr>
+            {% for hub, count in hub_stats %}
+            <tr>
+                <td>{{ hub }}</td>
+                <td>{{ count }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <!-- LOCATION LOG TABLE -->
+    <div class="table-box">
+        <h2>📍 Recent Location Logs</h2>
+        <table>
+            <tr>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Time</th>
+            </tr>
+            {% for row in recent_logs %}
+            <tr>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</div>
+
+<a class="back-btn" href="/admin_dashboard">⬅ Back to Admin</a>
+
+</body>
+</html>

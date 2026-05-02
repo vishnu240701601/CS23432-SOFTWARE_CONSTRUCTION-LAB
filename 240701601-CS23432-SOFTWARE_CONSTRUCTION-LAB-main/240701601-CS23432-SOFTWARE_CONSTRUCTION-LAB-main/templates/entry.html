@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Courier Tracking</title>
+
+    <!-- GLOBAL CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+
+    <!-- ICONS -->
+    <link rel="stylesheet"
+     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* VIEW TOGGLE */
+        .view-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .desktop-view {
+            max-width: 900px !important;
+        }
+
+        .mobile-view {
+            max-width: 420px !important;
+        }
+
+        .role-btn {
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <i class="fa fa-truck"></i> Smart Courier Tracking System
+</div>
+
+<div id="entryBox" class="container mobile-view">
+
+    <!-- VIEW TOGGLE -->
+    <div class="view-toggle">
+        <button onclick="setMobileView()">
+            <i class="fa fa-mobile-alt"></i> Mobile View
+        </button>
+        <button onclick="setDesktopView()">
+            <i class="fa fa-desktop"></i> Desktop View
+        </button>
+    </div>
+
+    <!-- MAIN CARD -->
+    <div class="card">
+        <h2><i class="fa fa-sign-in-alt"></i> Login As</h2>
+
+        <button class="role-btn" onclick="location.href='/admin_login'">
+            <i class="fa fa-user-shield"></i> Admin
+        </button>
+
+        <button class="role-btn" onclick="location.href='/user_login'">
+            <i class="fa fa-user"></i> User
+        </button>
+
+        <button class="role-btn" onclick="location.href='/staff_login'">
+            <i class="fa fa-id-badge"></i> Staff
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+function setMobileView() {
+    const box = document.getElementById("entryBox");
+    box.classList.remove("desktop-view");
+    box.classList.add("mobile-view");
+}
+
+function setDesktopView() {
+    const box = document.getElementById("entryBox");
+    box.classList.remove("mobile-view");
+    box.classList.add("desktop-view");
+}
+</script>
+
+</body>
+</html>

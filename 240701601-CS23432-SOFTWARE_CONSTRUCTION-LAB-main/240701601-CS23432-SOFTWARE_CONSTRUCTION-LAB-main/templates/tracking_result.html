@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Courier Tracking</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Global UI -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+
+    <style>
+        .view-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .view-toggle button { flex: 1; }
+
+        body.mobile-view { font-size: 14px; }
+        body.mobile-view #map { height: 260px !important; }
+
+        body.desktop-view { font-size: 16px; }
+        body.desktop-view #map { height: 400px !important; }
+    </style>
+</head>
+
+<body class="desktop-view">
+
+{% if courier %}
+
+<div class="header">
+    <i class="fa fa-truck"></i> Courier Tracking
+</div>
+
+<div class="container">
+
+    <!-- VIEW SWITCH -->
+    <div class="view-toggle">
+        <button onclick="setMobileView()">
+            <i class="fa fa-mobile-alt"></i> Mobile View
+        </button>
+        <button onclick="setDesktopView()">
+            <i class="fa fa-desktop"></i> Desktop View
+        </button>
+    </div>
+
+    <!-- DETAILS -->
+    <div class="card">
+        <h2>📦 Courier Details</h2>
+        <p><b>Tracking ID:</b> {{ courier[1] }}</p>
+        <p><b>Sender:</b> {{ courier[2] }}</p>
+        <p><b>Receiver:</b> {{ courier[3] }}</p>
+        <p><b>Source:</b> {{ courier[6] }}</p>
+        <p><b>Destination:</b> {{ courier[7] }}</p>
+        <p><b>Status:</b> {{ courier[9] }}</p>
+        <p><b>Expected Delivery:</b> {{ courier[10] }}</p>
+        <p><b>Staff ID:</b> {{ courier[8] }}</p>
+    </div>
+
+    <!-- MAP -->
+    <div class="card">
+        <h3>📍 Live Courier Location</h3>
+        <div id="map"></div>
+        <p id="locationStatus">📡 Waiting for live GPS updates...</p>
+    </div>
+
+    <!-- LIVE METRICS -->
+    <div class="card">
+        <h3>📏 Distance & Hub Info</h3>
+        <p><b>Total Distance:</b> <span id="totalDistance">--</span> km</p>
+        <p><b>Nearest Hub:</b> <span id="nearestHub">--</span></p>
+        <p><b>Distance to Hub:</b> <span id="hubDistance">--</span> km</p>
+    </div>
+
+    <!-- HISTORY -->
+    <div class="card">
+        <h3>📜 Delivery History</h3>
+        {% if history %}
+        <ul>
+            {% for h in history %}
+                <li>{{ h[0] }} – {{ h[1] }}</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            <p>No hub entries yet</p>
+        {% endif %}
+    </div>
+
+    <a href="/track_courier">⬅ Track Another Courier</a>
+</div>
+
+<script>
+const trackingId = "{{ courier[1] }}".trim().toUpperCase();
+
+/* VIEW TOGGLE */
+function setMobileView() {
+    document.body.classList.remove("desktop-view");
+    document.body.classList.add("mobile-view");
+}
+function setDesktopView() {
+    document.body.classList.remove("mobile-view");
+    document.body.classList.add("desktop-view");
+}
+
+/* MAP + ROUTE */
+const map = L.map('map').setView([11.1271, 78.6569], 6);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+}).addTo(map);
+
+let marker = null;
+let routeLine = null;
+
+function updateRoute() {
+    fetch(`/get_route_points/${trackingId}?t=` + Date.now())
+        .then(res => res.json())
+        .then(points => {
+            if (!points.length) return;
+
+            const latlngs = points.map(p => [Number(p.lat), Number(p.lon)]);
+            const last = latlngs[latlngs.length - 1];
+
+            if (!marker) marker = L.marker(last).addTo(map);
+            else marker.setLatLng(last);
+
+            if (routeLine) map.removeLayer(routeLine);
+            routeLine = L.polyline(latlngs, { color: 'blue', weight: 4 }).addTo(map);
+
+            map.setView(last, 16);
+            document.getElementById("locationStatus").innerText =
+                `📍 Live Location: ${last[0].toFixed(5)}, ${last[1].toFixed(5)}`;
+        });
+}
+
+/* LIVE METRICS */
+function updateLiveStats() {
+    fetch(`/get_live_stats/${trackingId}?t=` + Date.now())
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("totalDistance").innerText = data.total_distance;
+            document.getElementById("nearestHub").innerText = data.nearest_hub;
+            document.getElementById("hubDistance").innerText = data.hub_distance;
+        });
+}
+
+/* INTERVALS */
+updateRoute();
+updateLiveStats();
+setInterval(updateRoute, 5000);
+setInterval(updateLiveStats, 5000);
+</script>
+
+{% else %}
+<p style="color:red;">❌ Invalid Tracking ID</p>
+{% endif %}
+
+</body>
+</html>

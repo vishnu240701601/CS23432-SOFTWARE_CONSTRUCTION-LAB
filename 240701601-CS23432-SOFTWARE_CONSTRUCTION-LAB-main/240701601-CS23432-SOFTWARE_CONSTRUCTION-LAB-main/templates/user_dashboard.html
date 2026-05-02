@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Dashboard</title>
+
+    <!-- GLOBAL CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+
+    <!-- ICONS -->
+    <link rel="stylesheet"
+     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* VIEW TOGGLE */
+        .view-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .desktop-view {
+            max-width: 900px !important;
+        }
+
+        .mobile-view {
+            max-width: 420px !important;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <i class="fa fa-user"></i> User Dashboard
+</div>
+
+<div id="dashboard" class="container mobile-view">
+
+    <!-- VIEW TOGGLE BUTTONS -->
+    <div class="view-toggle">
+        <button onclick="setMobileView()">
+            <i class="fa fa-mobile-alt"></i> Mobile View
+        </button>
+        <button onclick="setDesktopView()">
+            <i class="fa fa-desktop"></i> Desktop View
+        </button>
+    </div>
+
+    <!-- MAIN CARD -->
+    <div class="card">
+        <h2><i class="fa fa-box"></i> Welcome</h2>
+
+        <a href="/track_courier" class="btn">
+            <i class="fa fa-search"></i> Track My Courier
+        </a>
+
+        <a href="/" class="btn" style="margin-top:10px;background:#d32f2f;">
+            <i class="fa fa-sign-out-alt"></i> Logout
+        </a>
+    </div>
+
+</div>
+
+<script>
+function setMobileView() {
+    const box = document.getElementById("dashboard");
+    box.classList.remove("desktop-view");
+    box.classList.add("mobile-view");
+}
+
+function setDesktopView() {
+    const box = document.getElementById("dashboard");
+    box.classList.remove("mobile-view");
+    box.classList.add("desktop-view");
+}
+</script>
+
+</body>
+</html>

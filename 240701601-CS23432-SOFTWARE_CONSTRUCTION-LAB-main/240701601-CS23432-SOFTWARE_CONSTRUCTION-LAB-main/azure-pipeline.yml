@@ -1,0 +1,24 @@
+trigger:
+- main   # or master (depending on your branch)
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+
+# Use Python
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.8'
+    addToPath: true
+
+# Install dependencies
+- script: |
+    python -m pip install --upgrade pip
+    pip install flask
+  displayName: 'Install dependencies'
+
+# Run your app (optional test run)
+- script: |
+    python app.py
+  displayName: 'Run application'

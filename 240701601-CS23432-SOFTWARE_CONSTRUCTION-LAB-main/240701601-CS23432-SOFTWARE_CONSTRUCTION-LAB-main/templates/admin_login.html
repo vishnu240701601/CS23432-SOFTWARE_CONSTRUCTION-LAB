@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin Login</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Global UI -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+
+    <!-- Icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        .view-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .view-toggle button {
+            flex: 1;
+        }
+
+        body.mobile-view .container {
+            max-width: 420px;
+        }
+
+        body.desktop-view .container {
+            max-width: 900px;
+        }
+    </style>
+</head>
+
+<body class="mobile-view">
+
+<!-- HEADER -->
+<div class="header">
+    <i class="fa fa-user-shield"></i> Admin Login
+</div>
+
+<div class="container">
+
+    <!-- VIEW SWITCH -->
+    <div class="view-toggle">
+        <button onclick="setMobileView()">
+            <i class="fa fa-mobile-alt"></i> Mobile View
+        </button>
+        <button onclick="setDesktopView()">
+            <i class="fa fa-desktop"></i> Desktop View
+        </button>
+    </div>
+
+    <!-- LOGIN CARD -->
+    <div class="card">
+
+        <h2>
+            <i class="fa fa-lock"></i>
+            Administrator Access
+        </h2>
+
+        <form method="post">
+
+            <div class="input-icon">
+                <i class="fa fa-user"></i>
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Admin Username"
+                    required
+                >
+            </div>
+
+            <div class="input-icon">
+                <i class="fa fa-key"></i>
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Admin Password"
+                    required
+                >
+            </div>
+
+            <button type="submit">
+                <i class="fa fa-sign-in-alt"></i>
+                Login
+            </button>
+
+        </form>
+
+    </div>
+</div>
+
+<!-- VIEW TOGGLE SCRIPT -->
+<script>
+function setMobileView() {
+    document.body.classList.remove("desktop-view");
+    document.body.classList.add("mobile-view");
+}
+
+function setDesktopView() {
+    document.body.classList.remove("mobile-view");
+    document.body.classList.add("desktop-view");
+}
+</script>
+
+</body>
+</html>
